@@ -1,7 +1,9 @@
-import React from "react";
+
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
+
   return (
     <div className="w-[20%] h-full border-r-2 text-zinc-400 p-10">
       <h1 className="text-2xl font-bold italic text-center text-white">
