@@ -5,6 +5,7 @@ import axios from "../utils/Axios";
 import Header from "../templates/Header";
 import HorizontalCards from "../templates/HorizontalCards";
 import Dropdown from "../templates/Dropdown";
+import Loading from "../templates/Loading";
 
 const Home = () => {
   document.title = "CineStream | Home"; // browser tab name when components load or mount. mostly use with useEffect()
@@ -61,7 +62,7 @@ const Home = () => {
       </div>
     </>
   ) : (
-    <h1>Loading...</h1>
+    <Loading/>
   );
 };
 
