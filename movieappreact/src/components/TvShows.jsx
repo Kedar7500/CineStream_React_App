@@ -8,23 +8,22 @@ import Loading from '../templates/Loading';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 
-const Trending = () => {
+const TvShows = () => {
 
-    document.title = "Trending";
+    document.title = "Tv Shows";
     const navigate = useNavigate();
-    const [category, setcategory] = useState("all");
-    const [duration, setduration] = useState("day");
-    const [trending, settrending] = useState([]);
+    const [category, setcategory] = useState("airing_today");
+    const [tv, settv] = useState([]);
     const [page, setpage] = useState(1);
     const [hasmore, sethasmore] = useState(true);
 
-    const getTrending = async () => {
+    const gettv = async () => {
         try {
-          const { data } = await axios.get(`/trending/${category}/${duration}?page=${page}`);
+          const { data } = await axios.get(`/tv/${category}?page=${page}`);
          // settrending(data.results);
 
          if(data.results.length > 0){
-          settrending((prevState)=> [...prevState,...data.results]);
+            settv((prevState)=> [...prevState,...data.results]);
           setpage(page+1);
          }
          else{
@@ -37,47 +36,46 @@ const Trending = () => {
         }
       };
 
-      console.log(trending)
+      console.log(tv)
 
       const refreshHandler = ()=>{
-        if(trending.length === 0){
-          getTrending();
+        if(tv.length === 0){
+            gettv();
         }
         else{
           setpage(1);
-          settrending([]);
-          getTrending();
+          settv([]);
+          gettv();
         }
       }
 
       useEffect(()=>{
         refreshHandler();
-      },[category,duration])
+      },[category])
 
-  return trending.length > 0 ? (
+  return tv.length > 0 ? (
     <div className='w-screen h-screen '>
         <div className='px-[5%] w-full flex items-center justify-between'>
             <h1 className=' text-2xl text-zinc-400 font-semibold'>
             <i onClick={()=> navigate(-1)} 
-            className="hover:text-[#6556CD] ri-arrow-left-line "></i>Trending
+            className="hover:text-[#6556CD] ri-arrow-left-line "></i>Tv Shows
             </h1>
             <div className='flex items-center w-[80%]'>
             <TopNav/>
-            <Dropdown title="category" options={["all","movie","tv"]} func={(e)=> setcategory(e.target.value)}/>
+            <Dropdown title="category" options={["popular","top_rated", "on_the_air","airring_today"]} func={(e)=> setcategory(e.target.value)}/>
             <div className='w-[2%]'></div>
-            <Dropdown title="Duration" options={["week","day"]} func={(e)=> setduration(e.target.value)}/>
             </div>
            
         </div>
         <InfiniteScroll
-        dataLength={trending.length}
-        next={getTrending}
+        dataLength={tv.length}
+        next={gettv}
         hasMore={hasmore}
         loader={<h1>Loading...</h1>}
 
 
         >
-        <Cards data={trending} title={category}/>
+        <Cards data={tv} title={category}/>
         </InfiniteScroll>
 
       
@@ -85,4 +83,4 @@ const Trending = () => {
   ) : <Loading/>
 }
 
-export default Trending
+export default TvShows;
